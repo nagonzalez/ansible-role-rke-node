@@ -1,0 +1,27 @@
+---
+- name: Set authorized key for rke user (used by installer)
+  authorized_key:
+    user: "{{ rke_node_user }}"
+    state: present
+    key: "{{ rke_node_user_ssh_public_key }}"
+
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+
+- name: gather facts
+  setup:
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: set net.bridge.bridge-nf-call-iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes

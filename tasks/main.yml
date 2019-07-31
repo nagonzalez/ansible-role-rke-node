@@ -1,0 +1,8 @@
+---
+# tasks file for ansible-role-rke-node
+
+# install docker
+- include: docker.yml
+
+# install rke requirements
+- include: requirements.yml
